@@ -2,12 +2,12 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import axios from "axios";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import redis from "ioredis";
+import Redis from "ioredis";
 
 // Create a Redis client
-const redisClient = redis.createClient({
-  host: "127.0.0.1",
-  port: 6379,
+const redisClient = new Redis({
+  host: process.env.REDIS_HOST || "127.0.0.1",
+  port: process.env.REDIS_PORT || 6379,
 });
 
 redisClient.on("error", (error) => {
