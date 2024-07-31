@@ -33,11 +33,11 @@ This project sets up an API Gateway using Express, with rate limiting, authentic
 3. Start the services with Docker Compose:
 	> docker-compose up
 
-This will:
+	This will:
 
-- Pull the necessary Docker images.
-- Set up the Node.js application container.
-- Set up the Redis container.
+	- Pull the necessary Docker images.
+	- Set up the Node.js application container.
+	- Set up the Redis container.
 
 ### Components
 #### Rate Limiting
