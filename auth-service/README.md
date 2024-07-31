@@ -37,11 +37,11 @@ This project provides an overview of the Auth Service application built with Exp
 3. Start the services with Docker Compose:
 	> docker-compose up
 
-This will:
+	This will:
 
--     Pull the necessary Docker images.
--     Set up the Node.js application container.
--     Set up the Redis container.
+	- Pull the necessary Docker images.
+	- Set up the Node.js application container.
+	- Set up the Redis container.
 
 ### Components
 #### Error Handling Middleware
