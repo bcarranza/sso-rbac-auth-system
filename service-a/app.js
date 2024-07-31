@@ -4,8 +4,8 @@ import redis from "ioredis";
 dotenv.config();
 
 const redisClient = redis.createClient({
-  host: "127.0.0.1", // Replace with your Redis server's IP address or hostname
-  port: 6379, // Replace with your Redis server's port (default is 6379)
+  host: process.env.REDIS_HOST || "127.0.0.1",
+  port: process.env.REDIS_PORT || 6379,
 });
 
 redisClient.on("error", (error) => {
