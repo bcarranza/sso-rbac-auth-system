@@ -24,7 +24,7 @@ This is an authentication service built with Express, Redis, and dotenv. It prov
 	> PORT (default: 3000)
 
 ### Usage
-1. Start Keycloack:
+1. Start the Redis server:
 	- Read the documentation [here](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/).
 
 2. Run the Auth Service:
