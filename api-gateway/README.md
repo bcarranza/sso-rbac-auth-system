@@ -6,6 +6,8 @@ This project sets up an API Gateway using Express, with rate limiting, authentic
 
 - Node.js
 - Redis
+- Docker
+- Docker Compose
 
 ### Installation
 
@@ -27,6 +29,15 @@ This project sets up an API Gateway using Express, with rate limiting, authentic
 
 2. Run the API Gateway:
 	> npm start
+
+3. Start the services with Docker Compose:
+	> docker-compose up
+
+This will:
+
+-     Pull the necessary Docker images.
+-     Set up the Node.js application container.
+-     Set up the Redis container.
 
 ### Components
 #### Rate Limiting
