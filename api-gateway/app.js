@@ -70,13 +70,13 @@ app.use(
 );
 
 app.use(
-  "/api/service1",
+  "/api/corporative-app-a",
   authMiddleware,
   createProxyMiddleware({
     target: service1Url,
     changeOrigin: true,
     pathRewrite: {
-      "^/api/service1": "",
+      "^/api/corporative-app-a": "",
     },
     onProxyReq: (proxyReq, req, res) => {
       if (req.method === "POST" && req.headers["content-type"]) {

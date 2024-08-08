@@ -52,7 +52,7 @@ app.get("/authenticate", (req, res) => {
   res.send("success");
 });
 
-app.get("/authorize", authorizationMiddleware("admin1"), (req, res) => {
+app.get("/authorize", authorizationMiddleware("default-roles-master"), (req, res) => {
   res.send("success");
 });
 
