@@ -26,7 +26,7 @@ const apiLimiter = rateLimit({
 });
 app.use(apiLimiter);
 
-const authUrl = "http://localhost:3001";
+const authUrl = process.env.AUTH_URL || "http://localhost:3001";
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -49,7 +49,7 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-const service1Url = "http://localhost:3002";
+const service1Url = process.env.SERVICE_A_URL || "http://localhost:3002";
 
 // Set up proxy middleware for each service
 

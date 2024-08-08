@@ -58,5 +58,5 @@ app.get("/authorize", authorizationMiddleware("admin1"), (req, res) => {
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
-  console.log(`Auth-service listening on port ${port}`);
+  console.log(`Corporative-app-a listening on port ${port}`);
 });
