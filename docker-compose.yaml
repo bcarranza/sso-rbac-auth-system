@@ -72,10 +72,10 @@ services:
       - keycloak
       - api-gateway
   
-  corporative-app-a:
-    image: corporative-app-a:latest
+  crm:
+    image: crm:latest
     build:
-      context: ./corporative-app-a
+      context: ./crm
       dockerfile: Dockerfile
     ports:
       - "8090:8090"

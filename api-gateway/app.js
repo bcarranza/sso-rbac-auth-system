@@ -10,6 +10,7 @@ const redisClient = new Redis({
   port: process.env.REDIS_PORT || 6379,
 });
 
+
 redisClient.on("error", (error) => {
   console.error("Redis client error:", error);
 });
@@ -70,13 +71,13 @@ app.use(
 );
 
 app.use(
-  "/api/corporative-app-a",
+  "/api/crm",
   authMiddleware,
   createProxyMiddleware({
     target: service1Url,
     changeOrigin: true,
     pathRewrite: {
-      "^/api/corporative-app-a": "",
+      "^/api/crm": "",
     },
     onProxyReq: (proxyReq, req, res) => {
       if (req.method === "POST" && req.headers["content-type"]) {

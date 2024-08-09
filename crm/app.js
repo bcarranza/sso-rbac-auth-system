@@ -36,7 +36,7 @@ app.use(async (req, res, next) => {
 const authorizationMiddleware = (requiredRole) => {
   return async (req, res, next) => {
     try {
-      const availableRoles = req.user.realm_access.roles;
+      const availableRoles = req.user.resource_access.crm.roles;
       if (!availableRoles.includes(requiredRole)) throw new Error();
       next();
     } catch (err) {
@@ -52,11 +52,11 @@ app.get("/authenticate", (req, res) => {
   res.send("success");
 });
 
-app.get("/authorize", authorizationMiddleware("default-roles-master"), (req, res) => {
+app.get("/authorize", authorizationMiddleware("reporting"), (req, res) => {
   res.send("success");
 });
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
-  console.log(`Corporative-app-a listening on port ${port}`);
+  console.log(`crm listening on port ${port}`);
 });
