@@ -50,7 +50,8 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - AUTH_URL=${AUTH_URL}
-      - SERVICE_A_URL=${SERVICE_A_URL}
+      - SERVICE_CRM_URL=${SERVICE_CRM_URL}
+      - SERVICE_GATEMASTER_URL=${SERVICE_GATEMASTER_URL}
     depends_on:
       - redis
       - keycloak
@@ -85,6 +86,21 @@ services:
       - REDIS_PORT=${REDIS_PORT}
     depends_on:
       - auth-service
+  
+  gatemaster:
+    image: gatemaster:latest
+    build:
+      context: ./gatemaster
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8091"
+    environment:
+      - PORT=8091
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      - auth-service
+
   mssql:
     container_name: mssql-db
     hostname: mssql-db
