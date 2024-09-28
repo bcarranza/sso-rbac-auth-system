@@ -33,12 +33,17 @@ const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader) return res.status(401).send("Missing authorization header");
   const token = authHeader.split(" ")[1];
+  
+  const tenant = req.query.tenant;
+  if (!tenant) return res.status(400).send("Missing tenant parameter");
+
+  
   let cachedData = await redisClient.get(token);
   if (cachedData) {
     return next();
   }
   try {
-    const response = await axios.get(`${authUrl}/verifyToken`, {
+    const response = await axios.get(`${authUrl}/verifyToken?tenant=${tenant}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const { data } = response;
@@ -46,12 +51,14 @@ const authMiddleware = async (req, res, next) => {
     next();
   } catch (error) {
     console.log({ error });
+    console.log(`URL: ${authUrl}/verifyToken?tenant=${tenant}`)
     res.status(401).send("Invalid or expired token");
   }
 };
 
-const service1Url = process.env.SERVICE_A_URL || "http://localhost:3002";
-
+const asgardUrl = process.env.ASGARD_URL || "http://localhost:3002";
+const midgardUrl = process.env.MIDGARD_URL || "http://localhost:3002";
+const jotunheimUrl = process.env.JOTUNHEIM_URL || "http://localhost:3002";
 // Set up proxy middleware for each service
 
 app.use(
@@ -70,14 +77,15 @@ app.use(
   })
 );
 
+// Asgard Proxy Rules
 app.use(
-  "/api/crm",
+  "/api/asgard",
   authMiddleware,
   createProxyMiddleware({
-    target: service1Url,
+    target: asgardUrl,
     changeOrigin: true,
     pathRewrite: {
-      "^/api/crm": "",
+      "^/api/asgard": "",
     },
     onProxyReq: (proxyReq, req, res) => {
       if (req.method === "POST" && req.headers["content-type"]) {
@@ -86,6 +94,43 @@ app.use(
     },
   })
 );
+
+// Midgard Proxy Rules
+app.use(
+  "/api/midgard",
+  authMiddleware,
+  createProxyMiddleware({
+    target: midgardUrl,
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/midgard": "",
+    },
+    onProxyReq: (proxyReq, req, res) => {
+      if (req.method === "POST" && req.headers["content-type"]) {
+        proxyReq.setHeader("Content-Type", req.headers["content-type"]);
+      }
+    },
+  })
+);
+
+// Jotunheim Proxy Rules
+app.use(
+  "/api/jotunheim",
+  authMiddleware,
+  createProxyMiddleware({
+    target: jotunheimUrl,
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/jotunheim": "",
+    },
+    onProxyReq: (proxyReq, req, res) => {
+      if (req.method === "POST" && req.headers["content-type"]) {
+        proxyReq.setHeader("Content-Type", req.headers["content-type"]);
+      }
+    },
+  })
+);
+
 
 const port = process.env.PORT || 3000;
 

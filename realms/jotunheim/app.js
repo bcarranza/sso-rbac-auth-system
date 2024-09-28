@@ -49,6 +49,7 @@ app.use(errorHandlingMiddleware);
 app.use(express.json());
 
 app.get("/authenticate", (req, res) => {
+  //it seems like this is a dummy route, it doesn't; api gateway is validating the token.
   res.send("success");
 });
 
@@ -58,5 +59,5 @@ app.get("/authorize", authorizationMiddleware("reporting"), (req, res) => {
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
-  console.log(`crm listening on port ${port}`);
+  console.log(`Jotunheim listening on port ${port}`);
 });

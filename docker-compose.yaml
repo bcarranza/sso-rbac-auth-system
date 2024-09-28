@@ -50,7 +50,9 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - AUTH_URL=${AUTH_URL}
-      - SERVICE_A_URL=${SERVICE_A_URL}
+      - ASGARD_URL=${ASGARD_URL}
+      - MIDGARD_URL=${MIDGARD_URL}
+      - JOTUNHEIM_URL=${JOTUNHEIM_URL}
     depends_on:
       - redis
       - keycloak
@@ -65,17 +67,14 @@ services:
     environment:
       - PORT=8083
       - KEYCLOAK_AUTH_SERVER_URL=${KEYCLOAK_AUTH_SERVER_URL}
-      - KEYCLOAK_REALM=${KEYCLOAK_REALM}
-      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID_APP}
-      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
     depends_on:
       - keycloak
       - api-gateway
   
-  crm:
-    image: crm:latest
+  asgard:
+    image: asgard:latest
     build:
-      context: ./crm
+      context: ./realms/asgard
       dockerfile: Dockerfile
     ports:
       - "8090:8090"
@@ -85,23 +84,34 @@ services:
       - REDIS_PORT=${REDIS_PORT}
     depends_on:
       - auth-service
-  mssql:
-    container_name: mssql-db
-    hostname: mssql-db
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  
+  midgard:
+    image: midgard:latest
+    build:
+      context: ./realms/midgard
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8091"
     environment:
-      ACCEPT_EULA: 'Y'
-      MSSQL_SA_PASSWORD: ${SQL_SA_PASSWORD}
-      MSSQL_DATA_DIR: /var/opt/mssql/data
-      MSSQL_PID: 'Developer' 
-      MSSQL_TCP_PORT: ${SQL_PORT} 
-    ports: 
-      - "1433:1433"
-    volumes:
-      - ./data:/var/opt/mssql/data
-      - ./log:/var/opt/mssql/log
-      - ./secrets:/var/opt/mssql/secrets
-
+      - PORT=8091
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      - auth-service
+  
+  jotunheim:
+    image: jotunheim:latest
+    build:
+      context: ./realms/jotunheim
+      dockerfile: Dockerfile
+    ports:
+      - "8092:8092"
+    environment:
+      - PORT=8092
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      - auth-service
 volumes:
   postgres_data:
     driver: local
