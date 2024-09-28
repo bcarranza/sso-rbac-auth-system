@@ -65,15 +65,9 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
 const asgardUrl = process.env.ASGARD_URL || "http://localhost:3002";
 const midgardUrl = process.env.MIDGARD_URL || "http://localhost:3002";
 const jotunheimUrl = process.env.JOTUNHEIM_URL || "http://localhost:3002";
-=======
-const serviceCRMURL = process.env.SERVICE_CRM_URL || "http://localhost:3002";
-const serviceGATEMASTERURL = process.env.SERVICE_GATEMASTER_URL || "http://localhost:3002";
-
->>>>>>> 0c50a7b54464ef4f0715c6e94351d90d136ab4c9
 // Set up proxy middleware for each service
 
 app.use(
