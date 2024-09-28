@@ -36,7 +36,7 @@ app.use(async (req, res, next) => {
 const authorizationMiddleware = (requiredRole) => {
   return async (req, res, next) => {
     try {
-      const availableRoles = req.user.resource_access.crm.roles;
+      const availableRoles = req.user.realm_access.roles;
       if (!availableRoles.includes(requiredRole)) throw new Error();
       next();
     } catch (err) {
@@ -45,16 +45,34 @@ const authorizationMiddleware = (requiredRole) => {
   };
 };
 
+const characters = [
+  { name: "Menglad", location: "jotunheim" },
+  { name: "Thjazi", location: "jotunheim" },
+  { name: "Angrboda", location: "jotunheim" },
+  { name: "Skaði", location: "jotunheim" },
+  { name: "Loki", location: "jotunheim" },
+  { name: "Fenrir", location: "jotunheim" }
+];
+
 app.use(errorHandlingMiddleware);
 app.use(express.json());
 
 app.get("/authenticate", (req, res) => {
-  //it seems like this is a dummy route, it doesn't; api gateway is validating the token.
+  //It seems like this is a dummy route, it doesn't; api gateway is validating the token.
   res.send("success");
 });
 
-app.get("/authorize", authorizationMiddleware("reporting"), (req, res) => {
+app.get("/authorize", authorizationMiddleware("characters"), (req, res) => {
   res.send("success");
+});
+
+app.get("/characters", authorizationMiddleware("characters"), (req, res) => {
+  const jotunheimCharacters = characters.filter(character => character.location === "Asgard");
+  if (jotunheimCharacters.length >= 5) {
+    res.json(jotunheimCharacters);
+  } else {
+    res.status(404).send("Not enough characters living in jotunheim found.");
+  }
 });
 
 const port = process.env.PORT || 3002;

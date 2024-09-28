@@ -26,7 +26,7 @@ app.post("/login", async (req, res) => {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      data: `grant_type=password&client_id=admin-cli&client_secret=${secret}&username=${username}&password=${password}`,
+      data: `grant_type=password&client_id=bifrost&client_secret=${secret}&username=${username}&password=${password}`,
     });
     const { access_token: accessToken, refresh_token: refreshToken } = data;
     res.json({
@@ -37,7 +37,7 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     console.error(err);
     console.error(`URL: ${process.env.KEYCLOAK_AUTH_SERVER_URL}/realms/${tenant}/protocol/openid-connect/token`)
-    console.error(`grant_type=password&client_id=admin-cli&client_secret=${secret}&username=${username}&password=${password}`)
+    console.error(`grant_type=password&client_id=bifrost&client_secret=${secret}&username=${username}&password=${password}`)
     res.status(401).send("Invalid credentials");
   }
 });
@@ -55,7 +55,7 @@ app.post("/refreshToken", async (req, res) => {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      data: `grant_type=refresh_token&client_id=admin-cli&client_secret=${secret}&refresh_token=${refreshToken}`,
+      data: `grant_type=refresh_token&client_id=bifrost&client_secret=${secret}&refresh_token=${refreshToken}`,
     });
     console.log({ data });
     const { access_token: accessToken } = data;
@@ -86,7 +86,7 @@ app.get("/verifyToken", async (req, res) => {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Bearer ${accessToken}`,
       },
-      data: `grant_type=password&client_id=admin-cli&client_secret=${secret}&token=${accessToken}`,
+      data: `grant_type=password&client_id=bifrost&client_secret=${secret}&token=${accessToken}`,
     });
 
     const { active } = data;
@@ -95,9 +95,9 @@ app.get("/verifyToken", async (req, res) => {
     res.send(data);
   } catch (error) {
     console.log ("hola, falle en el verify token");
-    console.log (`secret: ${secret}`);
-    console.log (`tenant: ${tenant}`);
-    console.log (`accessToken: ${accessToken}`);
+    //console.log (`secret: ${secret}`);
+    //console.log (`tenant: ${tenant}`);
+    //console.log (`accessToken: ${accessToken}`);
     console.log(`URL: ${process.env.KEYCLOAK_AUTH_SERVER_URL}/realms/${tenant}/protocol/openid-connect/token/introspect`)
     console.log(error.message);
     res.status(401).send(error.message);
@@ -119,7 +119,7 @@ app.get("/signout", async (req, res) => {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      data: `client_id=${tenant}&client_secret=admin-cli&token=${refreshToken}&token_type_hint=refresh_token`,
+      data: `client_id=${tenant}&client_secret=bifrost&token=${refreshToken}&token_type_hint=refresh_token`,
     });
     res.send({ data });
   } catch (err) {

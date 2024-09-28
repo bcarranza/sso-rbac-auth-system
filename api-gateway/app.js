@@ -40,9 +40,11 @@ const authMiddleware = async (req, res, next) => {
   
   let cachedData = await redisClient.get(token);
   if (cachedData) {
+    console.log("Using cached data");
     return next();
   }
   try {
+    console.log("Fetching data from auth service");
     const response = await axios.get(`${authUrl}/verifyToken?tenant=${tenant}`, {
       headers: { Authorization: `Bearer ${token}` },
     });

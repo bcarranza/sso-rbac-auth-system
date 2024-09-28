@@ -71,7 +71,7 @@ app.get("/characters", authorizationMiddleware("characters"), (req, res) => {
   if (asgardCharacters.length >= 5) {
     res.json(asgardCharacters);
   } else {
-    res.status(404).send("Not enough characters living in Asgard found.");
+    res.status(404).send("Not enough characters living in Midgard found.");
   }
 });
 

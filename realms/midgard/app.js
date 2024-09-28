@@ -36,7 +36,7 @@ app.use(async (req, res, next) => {
 const authorizationMiddleware = (requiredRole) => {
   return async (req, res, next) => {
     try {
-      const availableRoles = req.user.resource_access.crm.roles;
+      const availableRoles = req.user.realm_access.roles;
       if (!availableRoles.includes(requiredRole)) throw new Error();
       next();
     } catch (err) {
@@ -45,19 +45,48 @@ const authorizationMiddleware = (requiredRole) => {
   };
 };
 
+const characters = [
+  { name: "Tony Stark", location: "midgard" },
+  { name: "Bruce Banner", location: "midgard" },
+  { name: "Howar Stark", location: "midgard" },
+  { name: "Nick Fiury", location: "midgard" },
+  { name: "Steve Rogers", location: "midgard" },
+  { name: "Natasha Romanoff", location: "midgard" },
+  { name: "Clint Barton", location: "midgard" },
+  { name: "Wanda Maximoff", location: "midgard" },
+  { name: "Vision", location: "midgard" },
+  { name: "James Rhodes", location: "midgard" },
+  { name: "Sam Wilson", location: "midgard" },
+  { name: "Bucky Barnes", location: "midgard" },
+  { name: "Scott Lang", location: "midgard" },
+  { name: "Hope Van Dyne", location: "midgard" },
+  { name: "T'Challa", location: "midgard" },
+  { name: "Shuri", location: "midgard" },
+  { name: "Okoye", location: "midgard" },
+];
+
 app.use(errorHandlingMiddleware);
 app.use(express.json());
 
 app.get("/authenticate", (req, res) => {
-  //it seems like this is a dummy route, it doesn't; api gateway is validating the token.
+  //It seems like this is a dummy route, it doesn't; api gateway is validating the token.
   res.send("success");
 });
 
-app.get("/authorize", authorizationMiddleware("reporting"), (req, res) => {
+app.get("/authorize", authorizationMiddleware("characters"), (req, res) => {
   res.send("success");
+});
+
+app.get("/characters", authorizationMiddleware("characters"), (req, res) => {
+  const midgardCharacters = characters.filter(character => character.location === "Asgard");
+  if (midgardCharacters.length >= 5) {
+    res.json(midgardCharacters);
+  } else {
+    res.status(404).send("Not enough characters living in Midgard found.");
+  }
 });
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
-  console.log(`crm listening on port ${port}`);
+  console.log(`Midgard listening on port ${port}`);
 });
